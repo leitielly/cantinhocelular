@@ -26,6 +26,11 @@
         .logo-glow {
             filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
         }
+
+        /* Transição suave para o menu mobile */
+        .mobile-menu-transition {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-900 bg-[#F9FAFB]">
@@ -40,6 +45,7 @@
                     <span class="font-extrabold text-xl tracking-tight text-slate-900 uppercase">Cantinho<span class="text-green-600">Celular</span></span>
                 </div>
                 
+                <!-- Menu Desktop -->
                 <div class="hidden md:flex items-center space-x-10 text-[15px] font-medium text-slate-600">
                     <a href="#" onclick="showPage('home')" class="hover:text-green-600 transition-colors">Início</a>
                     <a href="#" onclick="resetAndShowShop()" class="hover:text-green-600 transition-colors">Produtos</a>
@@ -48,7 +54,13 @@
                     </a>
                 </div>
 
+                <!-- Ações Direita (Carrinho + Menu Mobile) -->
                 <div class="flex items-center gap-4">
+                    <!-- Botão Menu Hambúrguer (Mobile) -->
+                    <button id="mobile-menu-btn" class="md:hidden p-3 bg-white border border-slate-200 hover:border-green-500 hover:text-green-600 rounded-full transition-all shadow-sm">
+                        <i data-lucide="menu" class="w-5 h-5"></i>
+                    </button>
+                    
                     <button onclick="toggleCart()" class="relative p-3 bg-white border border-slate-200 hover:border-green-500 hover:text-green-600 rounded-full transition-all shadow-sm">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         <span id="cart-count" class="absolute -top-1 -right-1 bg-green-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md">0</span>
@@ -57,6 +69,35 @@
             </div>
         </div>
     </nav>
+
+    <!-- Menu Mobile Drawer -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 pointer-events-none">
+        <!-- Overlay escuro -->
+        <div id="mobile-menu-overlay" class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300 pointer-events-none"></div>
+        <!-- Painel lateral -->
+        <div id="mobile-menu-panel" class="absolute top-0 right-0 w-full max-w-xs h-full bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col z-10">
+            <div class="flex justify-between items-center p-6 border-b border-slate-100">
+                <span class="font-extrabold text-xl text-slate-900">Menu</span>
+                <button id="close-mobile-menu" class="p-2 hover:bg-slate-100 rounded-full transition-colors">
+                    <i data-lucide="x" class="w-5 h-5 text-slate-500"></i>
+                </button>
+            </div>
+            <div class="flex flex-col p-6 space-y-6 text-lg font-medium text-slate-700">
+                <a href="#" onclick="showPage('home'); closeMobileMenu();" class="flex items-center gap-3 py-2 hover:text-green-600 transition-colors">
+                    <i data-lucide="home" class="w-5 h-5"></i> Início
+                </a>
+                <a href="#" onclick="resetAndShowShop(); closeMobileMenu();" class="flex items-center gap-3 py-2 hover:text-green-600 transition-colors">
+                    <i data-lucide="smartphone" class="w-5 h-5"></i> Produtos
+                </a>
+                <a href="#" onclick="showPage('admin-login'); closeMobileMenu();" class="flex items-center gap-3 py-2 hover:text-green-600 transition-colors">
+                    <i data-lucide="lock" class="w-5 h-5"></i> Admin
+                </a>
+            </div>
+            <div class="mt-auto p-6 border-t border-slate-100">
+                <p class="text-xs text-slate-400 text-center">© 2026 Cantinho do Celular</p>
+            </div>
+        </div>
+    </div>
 
     <main class="flex-grow">
         <section id="page-home" class="page-section animate-in fade-in duration-700">
@@ -84,7 +125,7 @@
                         </button>
                     </div>
 
-                    <!-- LOGO HERO: agora preenche completamente o fundo redondo (sem padding, object-cover) -->
+                    <!-- LOGO HERO -->
                     <div class="md:col-span-5 flex justify-center relative">
                         <div class="relative group">
                             <div class="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-white/5 bg-white/5 backdrop-blur-md shadow-2xl flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-green-500/20 group-hover:scale-105">
@@ -187,7 +228,7 @@
                             <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/20">
                                 <i data-lucide="layout-dashboard" class="w-5 h-5 text-white"></i>
                             </div>
-                            <span class="font-bold text-slate-900 tracking-tight">Painel Administrativo</span>
+                            <span class="font-bold text-slate-900 tracking-tight">PAINEL LOJA</span>
                         </div>
                     </div>
                     <nav class="flex-1 p-4 space-y-2 mt-4">
@@ -496,6 +537,35 @@ const MOCK_DATA = [
 
         function clearFilter() { currentCategoryFilter = null; renderProducts(); }
 
+        // Menu Mobile
+        function openMobileMenu() {
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const panel = document.getElementById('mobile-menu-panel');
+            overlay.classList.remove('opacity-0');
+            overlay.classList.add('opacity-100');
+            panel.classList.remove('translate-x-full');
+            panel.classList.add('translate-x-0');
+            document.getElementById('mobile-menu').classList.remove('pointer-events-none');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const panel = document.getElementById('mobile-menu-panel');
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0');
+            panel.classList.remove('translate-x-0');
+            panel.classList.add('translate-x-full');
+            setTimeout(() => {
+                document.getElementById('mobile-menu').classList.add('pointer-events-none');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', openMobileMenu);
+        document.getElementById('close-mobile-menu')?.addEventListener('click', closeMobileMenu);
+        document.getElementById('mobile-menu-overlay')?.addEventListener('click', closeMobileMenu);
+
         document.getElementById('product-form')?.addEventListener('submit', function(e) {
             e.preventDefault();
             const editIdx = parseInt(document.getElementById('edit-index').value);
@@ -547,6 +617,9 @@ const MOCK_DATA = [
         renderAll();
         if(sessionStorage.getItem('cc_admin') === 'true') showPage('admin-panel');
         lucide.createIcons();
+
+        // Inicialmente o menu mobile está oculto e sem eventos
+        document.getElementById('mobile-menu').classList.add('pointer-events-none');
     </script>
 </body>
 </html>
