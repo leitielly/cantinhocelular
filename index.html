@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Cantinho do Celular | Tecnologia e Conexão</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
+        .page-transition { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .sidebar-item.active { background: #f0fdf4; color: #16a34a; border-right: 4px solid #16a34a; }
+        .category-card.active { border-color: #16a34a; background: #f0fdf4; transform: translateY(-4px); }
+        input:focus, select:focus { border-color: #16a34a; box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.1); }
+        
+        /* Hero Gradient harmonizado com a Logo (Verde Esmeralda e Tons Escuros) */
+        .hero-gradient {
+            background: linear-gradient(135deg, #020617 0%, #064e3b 50%, #10b981 100%);
+        }
+
+        /* Efeito de brilho na logo do Hero */
+        .logo-glow {
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.3));
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col text-slate-900 bg-[#F9FAFB]">
+
+    <nav id="navbar" class="sticky top-0 z-50 glass border-b border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-3 cursor-pointer group" onclick="showPage('home')">
+                    <div class="w-11 h-11 bg-slate-950 rounded-xl flex items-center justify-center shadow-lg group-hover:bg-green-600 transition-colors duration-300">
+                        <span class="text-white font-bold text-xl">C</span>
+                    </div>
+                    <span class="font-extrabold text-xl tracking-tight text-slate-900 uppercase">Cantinho<span class="text-green-600">Celular</span></span>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-10 text-[15px] font-medium text-slate-600">
+                    <a href="#" onclick="showPage('home')" class="hover:text-green-600 transition-colors">Início</a>
+                    <a href="#" onclick="resetAndShowShop()" class="hover:text-green-600 transition-colors">Produtos</a>
+                    <a href="#" onclick="showPage('admin-login')" class="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors text-slate-700">
+                        <i data-lucide="lock" class="w-4 h-4"></i> Admin
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleCart()" class="relative p-3 bg-white border border-slate-200 hover:border-green-500 hover:text-green-600 rounded-full transition-all shadow-sm">
+                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                        <span id="cart-count" class="absolute -top-1 -right-1 bg-green-600 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-md">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        <section id="page-home" class="page-section animate-in fade-in duration-700">
+            <div class="relative hero-gradient py-24 md:py-32 overflow-hidden">
+                <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
+                
+                <div class="relative max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
+                    <div class="md:col-span-7 text-left">
+                        <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-1.5 rounded-full mb-8">
+                            <span class="relative flex h-2 w-2"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span></span>
+                            <span class="text-white text-xs font-bold uppercase tracking-widest">Loja Autorizada</span>
+                        </div>
+
+                        <h1 class="text-5xl md:text-7xl font-[800] text-white leading-[1.1] mb-8 tracking-tight">
+                            Tecnologia que <br><span class="text-green-400">conecta você.</span>
+                        </h1>
+                        
+                        <p class="text-slate-200 text-lg md:text-xl mb-12 max-w-2xl leading-relaxed">
+                            Encontre os melhores iPhones, Androids e acessórios com a garantia e o estilo que você merece.
+                        </p>
+
+                        <button onclick="resetAndShowShop()" class="group bg-green-600 hover:bg-green-500 text-white px-10 py-5 rounded-2xl font-bold transition-all shadow-2xl shadow-green-900/40 flex items-center gap-3">
+                            Explorar Catálogo 
+                            <i data-lucide="arrow-right" class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </div>
+
+                    <!-- LOGO HERO: agora preenche completamente o fundo redondo (sem padding, object-cover) -->
+                    <div class="md:col-span-5 flex justify-center relative">
+                        <div class="relative group">
+                            <div class="w-72 h-72 md:w-96 md:h-96 rounded-full border-[12px] border-white/5 bg-white/5 backdrop-blur-md shadow-2xl flex items-center justify-center overflow-hidden transition-all duration-500 group-hover:border-green-500/20 group-hover:scale-105">
+                                <img src="img/logo.png" alt="Logo Cantinho do Celular" class="w-full h-full object-cover logo-glow">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 py-24">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Categorias em <span class="text-green-600">Destaque</span></h2>
+                    <div class="w-20 h-1.5 bg-green-600 mx-auto rounded-full"></div>
+                </div>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="category-card category-filter group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-300 text-center" data-category="Celulares">
+                        <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-100 transition-colors">
+                            <i data-lucide="smartphone" class="w-8 h-8 text-slate-700 group-hover:text-green-600"></i>
+                        </div>
+                        <p class="font-bold text-slate-900 text-lg">Celulares</p>
+                    </div>
+                    <div class="category-card category-filter group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-300 text-center" data-category="Acessórios">
+                        <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-100 transition-colors">
+                            <i data-lucide="headphones" class="w-8 h-8 text-slate-700 group-hover:text-green-600"></i>
+                        </div>
+                        <p class="font-bold text-slate-900 text-lg">Acessórios</p>
+                    </div>
+                    <div class="category-card category-filter group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-300 text-center" data-category="Informática">
+                        <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-100 transition-colors">
+                            <i data-lucide="laptop" class="w-8 h-8 text-slate-700 group-hover:text-green-600"></i>
+                        </div>
+                        <p class="font-bold text-slate-900 text-lg">Informática</p>
+                    </div>
+                    <div class="category-card category-filter group bg-white p-8 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl cursor-pointer transition-all duration-300 text-center" data-category="Mobilidade">
+                        <div class="w-16 h-16 bg-slate-50 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-green-100 transition-colors">
+                            <i data-lucide="bike" class="w-8 h-8 text-slate-700 group-hover:text-green-600"></i>
+                        </div>
+                        <p class="font-bold text-slate-900 text-lg">Mobilidade</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-shop" class="page-section hidden py-20">
+            <div class="max-w-7xl mx-auto px-6">
+                <div class="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
+                    <div class="text-center md:text-left">
+                        <h2 class="text-4xl font-extrabold text-slate-900">Nossos Produtos</h2>
+                        <p class="text-slate-500 mt-2 text-lg">Qualidade e tecnologia de ponta, com os melhores preços.</p>
+                    </div>
+                    <button id="clear-filter-btn" class="hidden flex items-center gap-2 bg-slate-200 hover:bg-slate-300 text-slate-700 px-6 py-2.5 rounded-full font-bold transition-all text-sm">
+                        <i data-lucide="x" class="w-4 h-4"></i> Limpar filtro
+                    </button>
+                </div>
+                <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                </div>
+            </div>
+        </section>
+
+        <section id="page-admin-login" class="page-section hidden min-h-[85vh] flex items-center justify-center bg-slate-50">
+            <div class="max-w-md w-full mx-6">
+                <div class="bg-white rounded-[2rem] shadow-2xl shadow-slate-200/60 overflow-hidden border border-slate-100">
+                    <div class="bg-slate-950 p-10 text-center">
+                        <div class="w-16 h-16 bg-green-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <i data-lucide="shield-check" class="text-white w-8 h-8"></i>
+                        </div>
+                        <h2 class="text-2xl font-bold text-white">Área Restrita</h2>
+                        <p class="text-slate-400 mt-2">Acesso exclusivo para administradores</p>
+                    </div>
+                    <div class="p-10 space-y-6">
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-1">Usuário</label>
+                            <div class="relative">
+                                <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                                <input type="text" id="admin-user" placeholder="admin" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none transition-all">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 ml-1">Senha</label>
+                            <div class="relative">
+                                <i data-lucide="key-round" class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400"></i>
+                                <input type="password" id="admin-pass" placeholder="••••••" class="w-full pl-12 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none transition-all">
+                            </div>
+                        </div>
+                        <button onclick="handleLogin()" class="w-full bg-slate-950 hover:bg-green-600 text-white py-4 rounded-2xl font-bold transition-all shadow-xl shadow-slate-900/10 flex items-center justify-center gap-3">
+                            Entrar no Painel <i data-lucide="log-in" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-admin-panel" class="page-section hidden bg-slate-50 min-h-screen">
+            <div class="flex flex-col lg:flex-row min-h-screen">
+                <aside class="lg:w-72 bg-white border-r border-slate-200 flex flex-col">
+                    <div class="p-8 border-b border-slate-100">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-600/20">
+                                <i data-lucide="layout-dashboard" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <span class="font-bold text-slate-900 tracking-tight">Painel Administrativo</span>
+                        </div>
+                    </div>
+                    <nav class="flex-1 p-4 space-y-2 mt-4">
+                        <div class="sidebar-item active rounded-xl px-4 py-4 flex items-center gap-3 font-semibold cursor-pointer transition-all" data-tab="products">
+                            <i data-lucide="package" class="w-5 h-5"></i> <span>Produtos</span>
+                        </div>
+                        <div class="sidebar-item rounded-xl px-4 py-4 flex items-center gap-3 font-semibold text-slate-500 hover:bg-slate-50 cursor-pointer transition-all" data-tab="add">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i> <span>Adicionar</span>
+                        </div>
+                    </nav>
+                    <div class="p-6 border-t border-slate-100">
+                        <button onclick="logout()" class="flex items-center gap-3 text-slate-400 hover:text-red-500 font-bold transition w-full px-4">
+                            <i data-lucide="log-out" class="w-5 h-5"></i> Sair
+                        </button>
+                    </div>
+                </aside>
+
+                <main class="flex-1 p-8 md:p-12">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+                            <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Total Produtos</p>
+                            <p id="stats-total" class="text-4xl font-black text-slate-900">0</p>
+                        </div>
+                        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+                            <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Valor Estoque</p>
+                            <p id="stats-value" class="text-4xl font-black text-green-600">R$ 0</p>
+                        </div>
+                        <div class="bg-white rounded-3xl p-8 border border-slate-100 shadow-sm">
+                            <p class="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Baixo Estoque</p>
+                            <p id="stats-lowstock" class="text-4xl font-black text-red-500">0</p>
+                        </div>
+                    </div>
+
+                    <div id="tab-products" class="admin-tab bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                        <div class="p-8 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center">
+                            <h3 class="text-xl font-bold">Inventário Completo</h3>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 text-slate-400 text-xs font-bold uppercase tracking-widest">
+                                    <tr>
+                                        <th class="px-8 py-5">Produto</th>
+                                        <th class="px-8 py-5">Preço</th>
+                                        <th class="px-8 py-5">Estoque</th>
+                                        <th class="px-8 py-5">Categoria</th>
+                                        <th class="px-8 py-5 text-right">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-product-list" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="tab-add" class="admin-tab hidden max-w-3xl mx-auto">
+                        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-10">
+                            <h3 class="text-2xl font-bold mb-8 text-slate-900" id="form-title">Adicionar Novo Produto</h3>
+                            <form id="product-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <input type="hidden" id="edit-index" value="-1">
+                                <div class="md:col-span-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 block">Nome do Produto</label>
+                                    <input type="text" id="p-name" placeholder="Ex: iPhone 15 Pro" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 block">Preço (R$)</label>
+                                    <input type="number" id="p-price" placeholder="4999.00" step="0.01" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none">
+                                </div>
+                                <div>
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 block">Categoria</label>
+                                    <select id="p-category" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none">
+                                        <option>Celulares</option><option>Acessórios</option><option>Informática</option><option>Mobilidade</option>
+                                    </select>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 block">URL da Imagem</label>
+                                    <input type="text" id="p-img" placeholder="https://..." class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="text-xs font-bold uppercase tracking-widest text-slate-500 mb-2 block">Estoque Inicial</label>
+                                    <input type="number" id="p-stock" placeholder="10" class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl outline-none">
+                                </div>
+                                <div class="md:col-span-2 pt-4">
+                                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-bold transition-all shadow-xl shadow-green-600/20">
+                                        Salvar Produto
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER CENTRALIZADO -->
+    <footer class="bg-slate-950 text-slate-500 border-t border-slate-900">
+        <div class="max-w-7xl mx-auto px-6 py-12 flex flex-col items-center justify-center text-center gap-4">
+            <p class="text-sm">© 2026 Cantinho do Celular. Todos os direitos reservados.</p>
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="cart-drawer" class="fixed inset-y-0 right-0 w-full max-w-md bg-white shadow-2xl z-[60] transform translate-x-full transition-transform duration-500 ease-out flex flex-col border-l border-slate-100">
+        <div class="p-8 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+            <h2 class="text-2xl font-extrabold flex items-center gap-3">
+                <i data-lucide="shopping-bag" class="text-green-600 w-7 h-7"></i> Carrinho
+            </h2>
+            <button onclick="toggleCart()" class="p-2 hover:bg-slate-200 rounded-full transition-colors">
+                <i data-lucide="x" class="w-6 h-6 text-slate-400"></i>
+            </button>
+        </div>
+        <div id="cart-items" class="flex-grow overflow-y-auto p-8 space-y-6"></div>
+        <div class="p-8 bg-slate-50 border-t border-slate-100">
+            <div class="flex justify-between items-end mb-8">
+                <span class="text-slate-500 font-medium">Total do pedido</span>
+                <span id="cart-total" class="text-3xl font-black text-slate-900">R$ 0,00</span>
+            </div>
+            <button onclick="checkout()" class="w-full bg-green-600 hover:bg-green-700 text-white py-5 rounded-2xl font-bold text-lg transition-all shadow-2xl shadow-green-600/20 flex items-center justify-center gap-3">
+                Finalizar via WhatsApp <i data-lucide="send" class="w-5 h-5"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const MOCK_DATA = [
+            { name: "iPhone 15 Pro Max", price: 8999, cat: "Celulares", img: "https://m.media-amazon.com/images/I/81Os13RBOnL._AC_SL1500_.jpg", stock: 5 },
+            { name: "Samsung Galaxy S24 Ultra", price: 7499, cat: "Celulares", img: "https://m.media-amazon.com/images/I/717B6nZ0uOL._AC_SL1500_.jpg", stock: 3 },
+            { name: "AirPods Pro Gen 2", price: 1899, cat: "Acessórios", img: "https://m.media-amazon.com/images/I/61SUj2WCx4L._AC_SL1500_.jpg", stock: 12 },
+            { name: "Moto Elétrica Vision E-1", price: 12500, cat: "Mobilidade", img: "https://images.unsplash.com/photo-1558981403-c5f91cbba527?q=80&w=800", stock: 2 }
+        ];
+
+        let products = JSON.parse(localStorage.getItem('cc_products')) || MOCK_DATA;
+        let cart = JSON.parse(localStorage.getItem('cc_cart')) || [];
+        let currentCategoryFilter = null;
+
+        function saveData() {
+            localStorage.setItem('cc_products', JSON.stringify(products));
+            localStorage.setItem('cc_cart', JSON.stringify(cart));
+            renderAll();
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-8 right-8 z-[100] bg-white border border-slate-100 rounded-2xl shadow-2xl p-5 flex items-center gap-4 animate-in slide-in-from-right duration-300 ${type === 'success' ? 'border-l-4 border-l-green-500' : 'border-l-4 border-l-red-500'}`;
+            toast.innerHTML = `<i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}" class="${type === 'success' ? 'text-green-500' : 'text-red-500'} w-6 h-6"></i><span class="font-bold text-slate-700">${message}</span>`;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => { toast.classList.add('animate-out', 'fade-out', 'translate-x-full'); setTimeout(() => toast.remove(), 500); }, 3000);
+        }
+
+        function renderAll() {
+            renderProducts();
+            updateCartUI();
+            if(document.getElementById('admin-product-list')) renderAdminProducts();
+            updateAdminStats();
+            lucide.createIcons();
+        }
+
+        function updateAdminStats() {
+            if(!document.getElementById('stats-total')) return;
+            const totalStockValue = products.reduce((sum, p) => sum + (p.price * p.stock), 0);
+            document.getElementById('stats-total').innerText = products.length;
+            document.getElementById('stats-value').innerText = `R$ ${totalStockValue.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            document.getElementById('stats-lowstock').innerText = products.filter(p => p.stock <= 2).length;
+        }
+
+        function showPage(pageId) {
+            const navbar = document.getElementById('navbar');
+            navbar.style.display = (pageId === 'admin-panel') ? 'none' : 'block';
+            document.querySelectorAll('.page-section').forEach(p => p.classList.add('hidden'));
+            document.getElementById(`page-${pageId}`).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if(pageId === 'shop') renderProducts();
+            if(pageId === 'admin-panel') renderAdminProducts();
+            lucide.createIcons();
+        }
+
+        function resetAndShowShop() { currentCategoryFilter = null; showPage('shop'); }
+        function toggleCart() { document.getElementById('cart-drawer').classList.toggle('translate-x-full'); }
+
+        function handleLogin() {
+            const user = document.getElementById('admin-user').value;
+            const pass = document.getElementById('admin-pass').value;
+            if(user === 'admin' && pass === '123') {
+                sessionStorage.setItem('cc_admin', 'true');
+                showPage('admin-panel');
+                showToast('Bem-vindo, administrador!');
+            } else { showToast('Credenciais inválidas!', 'error'); }
+        }
+
+        function logout() { sessionStorage.removeItem('cc_admin'); showPage('home'); showToast('Sessão encerrada'); }
+
+        function renderProducts() {
+            const grid = document.getElementById('product-grid');
+            if(!grid) return;
+            let filtered = currentCategoryFilter ? products.filter(p => p.cat === currentCategoryFilter) : products;
+            
+            const clearBtn = document.getElementById('clear-filter-btn');
+            if(clearBtn) clearBtn.classList.toggle('hidden', !currentCategoryFilter);
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-20 text-center"><i data-lucide="search-x" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i><h3 class="text-xl font-bold">Nenhum produto encontrado</h3></div>`;
+            } else {
+                grid.innerHTML = filtered.map((p, idx) => {
+                    const origIdx = products.findIndex(prod => prod.name === p.name);
+                    return `
+                    <div class="group bg-white rounded-[2.5rem] p-6 border border-slate-100 shadow-sm hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                        <div class="h-64 bg-slate-50 rounded-[2rem] mb-6 flex items-center justify-center relative overflow-hidden p-8">
+                            <img src="${p.img}" class="max-h-full object-contain mix-blend-multiply transition-transform duration-700 group-hover:scale-110" alt="${p.name}">
+                            ${p.stock <= 2 ? `<span class="absolute top-4 right-4 bg-red-500 text-white text-[10px] font-black px-3 py-1 rounded-full shadow-lg">ESGOTANDO</span>` : ''}
+                        </div>
+                        <span class="text-[10px] font-black text-green-600 uppercase tracking-[0.2em] bg-green-50 px-3 py-1 rounded-full">${p.cat}</span>
+                        <h3 class="font-bold text-xl text-slate-900 mt-4 line-clamp-1">${p.name}</h3>
+                        <p class="text-3xl font-black text-slate-900 mt-3 tracking-tight">R$ ${p.price.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <button onclick="addToCart(${origIdx})" class="w-full mt-6 bg-slate-950 group-hover:bg-green-600 text-white py-4 rounded-2xl font-bold transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-900/5">
+                            <i data-lucide="plus" class="w-5 h-5"></i> Adicionar
+                        </button>
+                    </div>`;
+                }).join('');
+            }
+            lucide.createIcons();
+        }
+
+        function renderAdminProducts() {
+            const list = document.getElementById('admin-product-list');
+            if(!list) return;
+            list.innerHTML = products.map((p, idx) => `
+                <tr class="hover:bg-slate-50/80 transition-colors">
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-4">
+                            <img src="${p.img}" class="w-12 h-12 object-cover rounded-xl border border-slate-100 bg-white">
+                            <span class="font-bold text-slate-900">${p.name}</span>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5 font-bold text-slate-700">R$ ${p.price.toLocaleString('pt-BR')}</td>
+                    <td class="px-8 py-5">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${p.stock <= 2 ? 'bg-red-50 text-red-600' : 'bg-slate-100 text-slate-600'}">${p.stock} unidades</span>
+                    </td>
+                    <td class="px-8 py-5 text-sm font-medium text-slate-500">${p.cat}</td>
+                    <td class="px-8 py-5 text-right">
+                        <button onclick="editProduct(${idx})" class="p-2 text-slate-400 hover:text-blue-600 transition-colors"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                        <button onclick="deleteProduct(${idx})" class="p-2 text-slate-400 hover:text-red-600 transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                    </td>
+                </tr>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function addToCart(index) {
+            const product = products[index];
+            if(product.stock <= 0) return showToast('Produto sem estoque!', 'error');
+            const existing = cart.find(item => item.name === product.name);
+            if(existing) existing.qty++; else cart.push({...product, qty: 1});
+            saveData();
+            showToast(`${product.name} no carrinho!`);
+        }
+
+        function updateCartUI() {
+            const container = document.getElementById('cart-items');
+            if(!container) return;
+            let total = 0;
+            const count = cart.reduce((acc, curr) => acc + curr.qty, 0);
+            document.getElementById('cart-count').innerText = count;
+            
+            container.innerHTML = cart.map((item, idx) => {
+                total += (item.price * item.qty);
+                return `
+                <div class="flex gap-5 bg-white border border-slate-100 p-4 rounded-2xl">
+                    <img src="${item.img}" class="w-20 h-20 object-contain bg-slate-50 rounded-xl p-2">
+                    <div class="flex-grow">
+                        <h4 class="font-bold text-slate-900 text-sm mb-1">${item.name}</h4>
+                        <p class="text-green-600 font-black text-lg">R$ ${item.price.toLocaleString('pt-BR')}</p>
+                        <div class="flex items-center gap-4 mt-3">
+                            <div class="flex items-center bg-slate-100 rounded-full px-2">
+                                <button onclick="changeQty(${idx}, -1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-900">-</button>
+                                <span class="w-6 text-center text-sm font-black">${item.qty}</span>
+                                <button onclick="changeQty(${idx}, 1)" class="w-8 h-8 flex items-center justify-center text-slate-500 hover:text-slate-900">+</button>
+                            </div>
+                            <button onclick="removeFromCart(${idx})" class="text-slate-400 hover:text-red-500 transition-colors ml-auto"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+            document.getElementById('cart-total').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+            lucide.createIcons();
+        }
+
+        function changeQty(idx, d) { cart[idx].qty += d; if(cart[idx].qty <= 0) cart.splice(idx,1); saveData(); }
+        function removeFromCart(idx) { cart.splice(idx,1); saveData(); }
+
+        function checkout() {
+            if(cart.length === 0) return showToast('Carrinho vazio!', 'error');
+            let total = 0, msg = "🛒 *Novo Pedido - Cantinho do Celular*%0A%0A";
+            cart.forEach(item => { msg += `• ${item.qty}x ${item.name} - R$ ${(item.price * item.qty).toLocaleString('pt-BR')}%0A`; total += (item.price * item.qty); });
+            msg += `%0A💰 *TOTAL: R$ ${total.toLocaleString('pt-BR')}*`;
+            window.open(`https://wa.me/5511999999999?text=${msg}`);
+        }
+
+        function setCategoryFilter(cat) {
+            currentCategoryFilter = (currentCategoryFilter === cat) ? null : cat;
+            showPage('shop');
+        }
+
+        function clearFilter() { currentCategoryFilter = null; renderProducts(); }
+
+        document.getElementById('product-form')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const editIdx = parseInt(document.getElementById('edit-index').value);
+            const newProd = { 
+                name: document.getElementById('p-name').value, 
+                price: parseFloat(document.getElementById('p-price').value), 
+                cat: document.getElementById('p-category').value, 
+                img: document.getElementById('p-img').value, 
+                stock: parseInt(document.getElementById('p-stock').value) 
+            };
+            if(editIdx > -1) { products[editIdx] = newProd; document.getElementById('form-title').innerText = 'Adicionar Novo Produto'; document.getElementById('edit-index').value = '-1'; }
+            else { products.push(newProd); }
+            this.reset(); saveData(); showToast('Sucesso na operação!');
+        });
+
+        function deleteProduct(idx) { if(confirm('Excluir este produto?')) { products.splice(idx,1); saveData(); showToast('Produto removido'); } }
+        function editProduct(idx) { 
+            const p = products[idx]; 
+            document.getElementById('p-name').value = p.name; 
+            document.getElementById('p-price').value = p.price; 
+            document.getElementById('p-category').value = p.cat; 
+            document.getElementById('p-img').value = p.img; 
+            document.getElementById('p-stock').value = p.stock; 
+            document.getElementById('edit-index').value = idx;
+            document.getElementById('form-title').innerText = `Editando: ${p.name}`;
+            document.querySelector('[data-tab="add"]').click();
+        }
+
+        document.querySelectorAll('.sidebar-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const tab = this.dataset.tab;
+                document.querySelectorAll('.admin-tab').forEach(t => t.classList.add('hidden'));
+                document.getElementById(`tab-${tab}`)?.classList.remove('hidden');
+                document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active', 'text-slate-500'));
+                this.classList.add('active');
+            });
+        });
+
+        document.querySelectorAll('.category-filter').forEach(el => {
+            el.addEventListener('click', () => {
+                document.querySelectorAll('.category-card').forEach(c => c.classList.remove('active'));
+                if (currentCategoryFilter !== el.dataset.category) el.classList.add('active');
+                setCategoryFilter(el.dataset.category);
+            });
+        });
+        
+        document.getElementById('clear-filter-btn')?.addEventListener('click', clearFilter);
+
+        renderAll();
+        if(sessionStorage.getItem('cc_admin') === 'true') showPage('admin-panel');
+        lucide.createIcons();
+    </script>
+</body>
+</html>
