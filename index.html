@@ -315,12 +315,12 @@
     </div>
 
     <script>
-        const MOCK_DATA = [
-            { name: "iPhone 15 Pro Max", price: 8999, cat: "Celulares", img: "https://m.media-amazon.com/images/I/81Os13RBOnL._AC_SL1500_.jpg", stock: 5 },
-            { name: "Samsung Galaxy S24 Ultra", price: 7499, cat: "Celulares", img: "https://m.media-amazon.com/images/I/717B6nZ0uOL._AC_SL1500_.jpg", stock: 3 },
-            { name: "AirPods Pro Gen 2", price: 1899, cat: "Acessórios", img: "https://m.media-amazon.com/images/I/61SUj2WCx4L._AC_SL1500_.jpg", stock: 12 },
-            { name: "Moto Elétrica Vision E-1", price: 12500, cat: "Mobilidade", img: "https://images.unsplash.com/photo-1558981403-c5f91cbba527?q=80&w=800", stock: 2 }
-        ];
+const MOCK_DATA = [
+    { name: "iPhone 15 Pro Max", price: 8999, cat: "Celulares", img: "img/iphone.png", stock: 5 },
+    { name: "Samsung Galaxy S24 Ultra", price: 7499, cat: "Celulares", img: "img/samsung.png", stock: 3 },
+    { name: "AirPods Pro Gen 2", price: 1899, cat: "Acessórios", img: "img/airpods.png", stock: 12 },
+    { name: "Moto Elétrica Vision E-1", price: 12500, cat: "Mobilidade", img: "img/moto.png", stock: 2 }
+];
 
         let products = JSON.parse(localStorage.getItem('cc_products')) || MOCK_DATA;
         let cart = JSON.parse(localStorage.getItem('cc_cart')) || [];
